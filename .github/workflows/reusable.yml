@@ -3,8 +3,7 @@ on:
   workflow_call:
     inputs:
       connection_protocol:
-        required: false
-        default: mongodb
+        required: true
         description: the mongodb connection protocol
         type: string
       cluster_address:

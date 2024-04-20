@@ -10,6 +10,7 @@ jobs:
   test:
     uses: ./.github/workflows/reusable.yml
     with:
+      connection_protocol: mongodb
       cluster_address: 127.0.0.1:3022
       port: 8080
     secrets:

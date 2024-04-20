@@ -1,0 +1,65 @@
+name: Deployment (Container)
+on:
+  workflow_call:
+    inputs:
+      connection_protocol:
+        required: false
+        default: mongodb
+        description: the mongodb connection protocol
+        type: string
+      cluster_address:
+        required: true
+        description: the mongodb cluster address
+        type: string
+      port:
+        required: true
+        description: the port that the app will be listening on
+        type: integer
+    secrets:
+      username:
+        required: true
+      password:
+        required: true
+    outputs:
+      artifact_name: ${{jobs.test.outputs.artifact_name}}
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mongodb-service:
+        image: mongo:latest
+        env:
+          MONGO_INITDB_ROOT_USERNAME: $username
+          MONGO_INITDB_ROOT_PASSWORD: $password
+        ports:
+        - 3022:27017
+    env:
+      MONGODB_CONNECTION_PROTOCOL: $connection_protocol
+      MONGODB_CLUSTER_ADDRESS: $cluster_address
+      MONGODB_USERNAME: $username
+      MONGODB_PASSWORD: $password
+      PORT: $port
+    outputs:
+      artifact_name: ${{steps.publisher.outputs.artifact_name}}
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: dependencies-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT # requires MongoDB Atlas to accept requests from anywhere!
+      - name: Run tests
+        run: npm test > test.txt
+      - name: upload test result
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test-result.txt
+      - name: produce output
+        id: publisher
+        run: echo "artifact_name=test-report" >> $GITHUB_OUTPUTS

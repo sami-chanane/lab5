@@ -23,7 +23,7 @@ jobs:
     - name: download artifact
       uses: actions/download-artifact@v4
       with:
-        name: artifact_name
+        name: ${{needs.test.outputs.artifact_name}}
     - name: list artifact content
       run: ls -l
       

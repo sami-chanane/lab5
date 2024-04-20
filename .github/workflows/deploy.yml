@@ -16,6 +16,7 @@ jobs:
       username: ${{secrets.DB_USER}}
       password: ${{secrets.DB_PASSWORD}}
   check:
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
     - name: download artifact

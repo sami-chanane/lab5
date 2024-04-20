@@ -14,7 +14,7 @@ on:
       port:
         required: true
         description: the port that the app will be listening on
-        type: integer
+        type: string
     secrets:
       username:
         required: true

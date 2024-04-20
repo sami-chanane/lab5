@@ -21,7 +21,8 @@ on:
       password:
         required: true
     outputs:
-      artifact_name: ${{jobs.test.outputs.artifact_name}}
+      artifact_name: 
+        value: ${{jobs.test.outputs.artifact_name}}
 jobs:
   test:
     runs-on: ubuntu-latest

@@ -66,4 +66,4 @@ jobs:
           path: test-result.txt
       - name: produce output
         id: publisher
-        run: echo "artifact_name=test-report" >> $GITHUB_OUTPUTS
+        run: echo "artifact_name=test-report" >> $GITHUB_OUTPUT

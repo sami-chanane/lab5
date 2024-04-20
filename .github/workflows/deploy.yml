@@ -8,7 +8,7 @@ env:
   MONGODB_DB_NAME: gha-demo
 jobs:
   test:
-    uses: .github/workflows/reusable.yml
+    uses: ./.github/workflows/reusable.yml
     with:
       cluster_address: 127.0.0.1:3022
       port: 8080
